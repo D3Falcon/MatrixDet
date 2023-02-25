@@ -11,10 +11,11 @@ O resultado é o determinante já calculado. O programa repete até que o user e
 o número zero, como ordem de matriz para encerrar.*/
 
 
-int det_2 (int M[][2]);
-int det_3 (int M[][3]);
-int det_4 (int M[][4], int x);
+int det_2 (int M2[][2]);
+int det_3 (int M[][9], int x);
+
 int main() {
+    int M[9][9], M2[2][2];
     int x = 0;
     char a = '0';
     do {
@@ -32,38 +33,36 @@ int main() {
             cout << "Det = " << det << ".\n";
             } 
         else if (x==2) {
-            int M[2][2];
             //Aqui é o pedido de elementos da matrix a ser calculada. Essa chamada vai se repetir em todas as ordens, até que eu faça uma função com esse propósito.
             for (int i = 0; i < x; i++) {
                 for (int j = 0; j < x; j++) {
                        cout << "Enter matrix element a" << i+1 << j+1 << "\n ";
-                       cin >> M[i][j];
+                       cin >> M2[i][j];
                 }
             }
-            det = det_2 (M);
+            det = det_2 (M2);
             cout << "Det = " << det << ".\n";
 
         } else if (x==3) {
-            int M[3][3];
             for (int i = 0; i < x; i++) {
                 for (int j = 0; j < x; j++) {
                        cout << "Enter matrix element a" << i+1 << j+1 << "\n ";
                        cin >> M[i][j];
                 }
             }
-            det = det_3 (M);
+            det = det_3 (M, x);
             cout << "Det = " << det << ".\n";
-        } else if (x==4) {
-            int M[4][4];
+        } else if (x>3 && x<10) {
             for (int i = 0; i < x; i++) {
                 for (int j = 0; j < x; j++) {
                        cout << "Enter matrix element a" << i+1 << j+1 << "\n ";
                        cin >> M[i][j];
                 }
             }
-            det = det_4 (M, x);
+            
+            det = det_3 (M, x);
             cout << "Det = " << det << ".\n";
-        } else if (x > 4) {
+        } else if (x > 9) {
             cout << "We don't have support for this order yet. New versions comming soon.\n";
         }
         cout << " " << x << "\n";
@@ -78,36 +77,31 @@ int det_2 (int M[][2])
     return det2;
 }
 
-int det_3 (int M[][3]) 
+int det_3 (int M[][9], int x) 
 {
     //Essa função cria submatrizes para serem utilizadas na função de ordem 2.
     int det = 0;
     int subM[2][2];
-    for (int i = 0; i < 3; i++){
-        for ( int j = 1; j < 3; j++){
-            //Aqui usamos 3 loops encadeados e um contador para criar as submatrizes.
-            int countk = 0;
-            for (int k = 0; k < 3; k++){
-                if (k != i){
-                    subM[j-1][countk] = M[j][k]; 
-                    countk++;
+    if (x==3) 
+    {
+        for (int i = 0; i < 3; i++) {
+            for ( int j = 1; j < 3; j++){
+                //Aqui usamos 3 loops encadeados e um contador para criar as submatrizes.
+                int countk = 0;
+                for (int k = 0; k < 3; k++){
+                    if (k != i){
+                        subM[j-1][countk] = M[j][k]; 
+                        countk++;
+                    }
                 }
             }
-        }
         det += pow (-1, i+2) * M[0][i] * det_2(subM);
-
+        }
+        return det;
     }
-    return det;
-}
-
-int det_4 (int M[][4], int x) 
-{
-    // A ideia dessa função é repetir a função 'det_3' mas para ordens maiores. 
-    // O próximo passo seria passar tudo para ser calculado para função 'det_3', que será chamada recursivamente.
-    int det = 0;
-    if (x == 4)
+    else
     {
-        int subM[3][3];
+        int subM[9][9];
         for (int i = 0; i < x; i++){
             for ( int j = 1; j < x; j++){
                 int countk = 0;
@@ -115,12 +109,12 @@ int det_4 (int M[][4], int x)
                      if (k != i){
                         subM[j-1][countk] = M[j][k]; 
                          countk++;
+                    }
                 }
             }
+        det += pow (-1, i+2) * M[0][i] * det_3(subM, x-1);
         }
-        det += pow (-1, i+2) * M[0][i] * det_3(subM);
-    } 
+        return det; 
     }
-    return det;
+    
 }
-
