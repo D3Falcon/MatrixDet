@@ -5,7 +5,7 @@
 
 using namespace std;
 
-/*O propósito desse programa é calcular o determinante de matrizes com imput do user.
+/*O propósito desse programa é calcular o determinante de matrizes com input do user.
 Primeiro, o programa pede para informar a ordem da matriz e em seguida os elementos.
 O resultado é o determinante já calculado. O programa repete até que o user entre com
 o número zero, como ordem de matriz para encerrar.*/
